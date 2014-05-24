@@ -1,0 +1,30 @@
+{
+	"name" : "keeko/api-app",
+	"type" : "keeko-app",
+	"description" : "Keeko API Application",
+	"license" : "MIT",
+	"require" : {
+		"php" : ">=5.4"
+	},
+	"keywords" : [
+		"keeko",
+		"api"
+	],
+	"autoload" : {
+		"psr-4" : {
+			"keeko\\application\\api\\" : "src"
+		}
+	},
+	"require-dev" : {
+		"keeko/core" : "dev-master",
+		"composer/composer" : "@dev",
+		"propel/propel" : "@dev"
+	},
+	"extra" : {
+		"keeko" : {
+			"title" : "API Application",
+			"class" : "\\keeko\\application\\api\\ApiApplication"
+		},
+		"local" : "../../"
+	}
+}

@@ -6,11 +6,12 @@ use keeko\core\routing\AbstractRouter;
 use keeko\core\model\ApiQuery;
 use Symfony\Component\Routing\RouteCollection;
 use Symfony\Component\Routing\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 class ApiRouter extends AbstractRouter {
 	
-	public function __construct(array $options) {
-		parent::__construct($options);
+	public function __construct(Request $request, array $options) {
+		parent::__construct($request, $options);
 	
 		// create routes from db
 		$apis = ApiQuery::create()->joinAction()->useActionQuery()->joinModule()->endUse()->find();
@@ -34,6 +35,9 @@ class ApiRouter extends AbstractRouter {
 					[], // schemes
 					[$api->getMethod()] // methods
 			);
+			
+			// debug: print routes
+// 			printf('%s: %s -> %s<br>', $api->getMethod(), $path, $module->getName() . ':' . $action->getName());
 			
 			$routes->add($name, $route);
 			

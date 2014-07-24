@@ -4,7 +4,13 @@
 	"description" : "Keeko API Application",
 	"license" : "MIT",
 	"require" : {
-		"php" : ">=5.4"
+		"php" : ">=5.4",
+		"keeko/composer-installer" : "*"
+	},
+	"require-dev" : {
+		"keeko/core" : "dev-master",
+		"composer/composer" : "@dev",
+		"propel/propel" : "@dev"
 	},
 	"keywords" : [
 		"keeko",
@@ -14,15 +20,6 @@
 		"psr-4" : {
 			"keeko\\application\\api\\" : "src"
 		}
-	},
-	"require": {
-		"php": ">=5.4",
-		"keeko/composer-installer" : "*"
-	},
-	"require-dev" : {
-		"keeko/core" : "dev-master",
-		"composer/composer" : "@dev",
-		"propel/propel" : "@dev"
 	},
 	"extra" : {
 		"keeko" : {

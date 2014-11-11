@@ -32,7 +32,7 @@ class ApiApplication extends AbstractApplication {
 			$match = $router->match($path);
 
 			$action = $match['action'];
-			$module = $this->moduleManager->load($action->getModule()->getName());
+			$module = $this->service->getModuleManager()->load($action->getModule()->getName());
 			$action = $module->loadAction($action, 'json');
 
 			$params = $match['params'];
@@ -41,12 +41,17 @@ class ApiApplication extends AbstractApplication {
 			unset($match['path']);
 			unset($match['params']);
 			
+			
+			
 			$body = [];
 			$contents = $request->getContent();
 			if (!empty($contents)) {
-				$body = json_decode($contents, true);
+				$json = json_decode($contents, true);
+				if ($json !== null) {
+					$body = $json;
+				}
 			}
-			
+
 			$action->setParams(array_merge($params, $match, $body));
 			
 			return $action->run($request);

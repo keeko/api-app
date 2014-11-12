@@ -14,6 +14,8 @@ use Symfony\Component\Routing\RequestContext;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use keeko\core\exceptions\PermissionDeniedException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
 class ApiApplication extends AbstractApplication {
 	
@@ -41,8 +43,6 @@ class ApiApplication extends AbstractApplication {
 			unset($match['path']);
 			unset($match['params']);
 			
-			
-			
 			$body = [];
 			$contents = $request->getContent();
 			if (!empty($contents)) {
@@ -57,16 +57,28 @@ class ApiApplication extends AbstractApplication {
 			return $action->run($request);
 		} catch (ResourceNotFoundException $e) {
 			$response->setStatusCode(Response::HTTP_NOT_FOUND);
+			$response->setData($this->exceptionToJson($e));
+		} catch (PermissionDeniedException $e) {
+			$response->setStatusCode($e->getCode());
+			$response->setData($this->exceptionToJson($e));
+		} catch (MethodNotAllowedException $e) {
+			$response->setStatusCode(Response::HTTP_METHOD_NOT_ALLOWED);
+			$response->setData($this->exceptionToJson($e));
 		} catch (\Exception $e) {
-			$response->setData([
+			$response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
+			$response->setData($this->exceptionToJson($e));
+		}
+		return $response;
+	}
+	
+	private function exceptionToJson(\Exception $e) {
+		return [
 				'error' => [
 					'code' => $e->getCode(),
 					'message' => $e->getMessage(),
 					'type' => get_class($e)
 				]
-			]);
-		}
-		return $response;
+			];
 	}
 
 }

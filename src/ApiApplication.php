@@ -27,7 +27,7 @@ class ApiApplication extends AbstractApplication {
 	public function run(Request $request, $path) {
 	
 		$response = new JsonResponse();
-		$router = new ApiRouter($request, ['basepath' => $this->prefix]);
+		$router = new ApiRouter($request, ['basepath' => $this->getAppPath()]);
 
 		try {
 			$path = str_replace('//', '/', '/' . $path);

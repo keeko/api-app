@@ -24,13 +24,13 @@ class ApiApplication extends AbstractApplication {
 	/* (non-PHPdoc)
 	 * @see \keeko\core\application\AbstractApplication::run()
 	 */
-	public function run(Request $request, $path) {
+	public function run(Request $request) {
 	
 		$response = new JsonResponse();
 		$router = new ApiRouter($request, ['basepath' => $this->getAppPath()]);
 
 		try {
-			$path = str_replace('//', '/', '/' . $path);
+			$path = str_replace('//', '/', '/' . $this->getDestinationPath());
 			$match = $router->match($path);
 
 			$action = $match['action'];
@@ -54,20 +54,33 @@ class ApiApplication extends AbstractApplication {
 
 			$action->setParams(array_merge($params, $match, $body));
 			
-			return $action->run($request);
-		} catch (ResourceNotFoundException $e) {
+			return $this->runAction($action, $request);
+		}
+		
+		// 404 - Resource not found
+		catch (ResourceNotFoundException $e) {
 			$response->setStatusCode(Response::HTTP_NOT_FOUND);
 			$response->setData($this->exceptionToJson($e));
-		} catch (PermissionDeniedException $e) {
+		} 
+		
+		// 403 - Permission denied
+		catch (PermissionDeniedException $e) {
 			$response->setStatusCode($e->getCode());
 			$response->setData($this->exceptionToJson($e));
-		} catch (MethodNotAllowedException $e) {
+		} 
+		
+		// 405 - Method not allowed
+		catch (MethodNotAllowedException $e) {
 			$response->setStatusCode(Response::HTTP_METHOD_NOT_ALLOWED);
 			$response->setData($this->exceptionToJson($e));
-		} catch (\Exception $e) {
+		} 
+		
+		// 500 - Internal Server error
+		catch (\Exception $e) {
 			$response->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR);
 			$response->setData($this->exceptionToJson($e));
 		}
+
 		return $response;
 	}
 	

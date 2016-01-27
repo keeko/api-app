@@ -1,5 +1,4 @@
 <?php
-
 namespace keeko\application\api;
 
 use keeko\core\routing\AbstractRouter;

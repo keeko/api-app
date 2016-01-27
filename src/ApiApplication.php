@@ -1,5 +1,4 @@
 <?php
-
 namespace keeko\application\api;
 
 use keeko\core\application\AbstractApplication;
@@ -86,12 +85,12 @@ class ApiApplication extends AbstractApplication {
 	
 	private function exceptionToJson(\Exception $e) {
 		return [
-				'error' => [
-					'code' => $e->getCode(),
-					'message' => $e->getMessage(),
-					'type' => get_class($e)
-				]
-			];
+			'error' => [
+				'code' => $e->getCode(),
+				'message' => $e->getMessage(),
+				'type' => get_class($e)
+			]
+		];
 	}
 
 }

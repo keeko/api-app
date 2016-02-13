@@ -1,11 +1,11 @@
 <?php
 namespace keeko\application\api;
 
-use keeko\core\routing\AbstractRouter;
 use keeko\core\model\ApiQuery;
-use Symfony\Component\Routing\RouteCollection;
-use Symfony\Component\Routing\Route;
+use keeko\core\routing\AbstractRouter;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Route;
+use Symfony\Component\Routing\RouteCollection;
 
 class ApiRouter extends AbstractRouter {
 	
@@ -26,15 +26,15 @@ class ApiRouter extends AbstractRouter {
 		
 			$name = $module->getName() . ':' . $action->getName() . '@' . $api->getMethod();
 			$route = new Route(
-					$path, // path
-					['path' => $path, 'action' => $action], // default values
-					$required, // required
-					[], // options
-					null, // host
-					[], // schemes
-					[$api->getMethod()] // methods
+				$path, // path
+				['path' => $path, 'action' => $action], // default values
+				$required, // required
+				[], // options
+				null, // host
+				[], // schemes
+				[$api->getMethod()] // methods
 			);
-			
+
 			// debug: print routes
 // 			printf('%s: %s -> %s<br>', $api->getMethod(), $path, $module->getName() . ':' . $action->getName());
 			

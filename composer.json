@@ -1,17 +1,8 @@
 {
 	"name" : "keeko/api-app",
-	"type" : "keeko-app",
 	"description" : "Keeko API Application",
+	"type" : "keeko-app",
 	"license" : "MIT",
-	"require" : {
-		"php" : ">=5.4",
-		"keeko/composer-installer" : "*"
-	},
-	"require-dev" : {
-		"keeko/core" : "dev-master",
-		"composer/composer" : "@dev",
-		"propel/propel" : "@dev"
-	},
 	"keywords" : [
 		"keeko",
 		"api"
@@ -21,13 +12,29 @@
 			"keeko\\application\\api\\" : "src"
 		}
 	},
+	"require" : {
+		"php" : ">=5.4",
+		"keeko/composer-installer" : "*",
+		"puli/repository" : "^1.0@beta"
+	},
+	"require-dev" : {
+		"keeko/core" : "dev-master",
+		"composer/composer" : "@dev",
+		"propel/propel" : "@dev",
+		"puli/composer-plugin" : "@beta",
+		"puli/twig-extension" : "@beta",
+		"puli/url-generator" : "@beta",
+		"puli/discovery" : "@beta"
+	},
 	"extra" : {
 		"keeko" : {
 			"app" : {
 				"title" : "API Application",
-				"class" : "\\keeko\\application\\api\\ApiApplication"
+				"class" : "\\keeko\\application\\api\\ApiApplication",
+				"extension-points": {
+					"keeko.api": "schema/api.json" 
+				}
 			}
-		},
-		"local" : "../../"
+		}
 	}
 }

@@ -2,7 +2,7 @@
 namespace keeko\application\api;
 
 use keeko\core\model\ApiQuery;
-use keeko\core\routing\AbstractRouter;
+use keeko\framework\routing\AbstractRouter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;

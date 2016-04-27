@@ -1,8 +1,8 @@
 <?php
 namespace keeko\application\api;
 
-use keeko\core\package\AbstractApplication;
-use keeko\core\exceptions\PermissionDeniedException;
+use keeko\framework\foundation\AbstractApplication;
+use keeko\framework\exceptions\PermissionDeniedException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,18 +32,18 @@ class ApiApplication extends AbstractApplication {
 			unset($match['path']);
 			unset($match['params']);
 			
-			$body = [];
-			$contents = $request->getContent();
-			if (!empty($contents)) {
-				$json = json_decode($contents, true);
-				if ($json !== null) {
-					$body = $json;
-				}
-			}
+// 			$body = [];
+// 			$contents = $request->getContent();
+// 			if (!empty($contents)) {
+// 				$json = json_decode($contents, true);
+// 				if ($json !== null) {
+// 					$body = $json;
+// 				}
+// 			}
 
-			$action->setParams(array_merge($params, $match, $body));
+			$action->setParams(array_merge($params, $match));
 			$kernel = $this->getServiceContainer()->getKernel();
-			return $kernel->handle($action, $request);
+			$response = $kernel->handle($action, $request);
 		}
 		
 		// 404 - Resource not found
@@ -91,8 +91,7 @@ class ApiApplication extends AbstractApplication {
 	 */
 	private function postProcessing(JsonResponse $response) {
 		$apiUrl = $this->getServiceContainer()->getPreferenceLoader()->getSystemPreferences()->getApiUrl();
-		$content = $response->getContent();
-		$response->setContent(str_replace('%apiurl%', $apiUrl, $content));
+		$response->setContent(str_replace('%apiurl%', $apiUrl, $response->getContent()));
 		return $response;
 	}
 

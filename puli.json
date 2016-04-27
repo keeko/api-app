@@ -8,6 +8,11 @@
         "bootstrap-file": "vendor/autoload.php"
     },
     "packages": {
+        "composer/ca-bundle": {
+            "install-path": "vendor/composer/ca-bundle",
+            "installer": "composer",
+            "env": "dev"
+        },
         "composer/composer": {
             "install-path": "vendor/composer/composer",
             "installer": "composer",
@@ -47,8 +52,18 @@
             "installer": "composer",
             "env": "dev"
         },
+        "keeko/framework": {
+            "install-path": "vendor/keeko/framework",
+            "installer": "composer",
+            "env": "dev"
+        },
         "monolog/monolog": {
             "install-path": "vendor/monolog/monolog",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "paragonie/random_compat": {
+            "install-path": "vendor/paragonie/random_compat",
             "installer": "composer",
             "env": "dev"
         },
@@ -187,6 +202,11 @@
         },
         "symfony/yaml": {
             "install-path": "vendor/symfony/yaml",
+            "installer": "composer",
+            "env": "dev"
+        },
+        "tobscure/json-api": {
+            "install-path": "vendor/tobscure/json-api",
             "installer": "composer",
             "env": "dev"
         },

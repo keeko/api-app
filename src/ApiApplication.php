@@ -14,12 +14,16 @@ class ApiApplication extends AbstractApplication {
 	private $prefixes;
 
 	public function run(Request $request) {
-
 		$response = new JsonResponse();
 		$router = new ApiRouter($request, ['basepath' => $this->getAppPath()]);
+		$path = str_replace('//', '/', '/' . $this->getDestinationPath());
+		
+		// set headers for CORS
+		if ($request->isMethod('options')) {
+			return $this->setCorsHeaders($response, $router, $path);
+		}
 
 		try {
-			$path = str_replace('//', '/', '/' . $this->getDestinationPath());
 			$match = $router->match($path);
 
 			$action = $match['action'];
@@ -31,15 +35,6 @@ class ApiApplication extends AbstractApplication {
 			unset($match['action']);
 			unset($match['path']);
 			unset($match['params']);
-			
-// 			$body = [];
-// 			$contents = $request->getContent();
-// 			if (!empty($contents)) {
-// 				$json = json_decode($contents, true);
-// 				if ($json !== null) {
-// 					$body = $json;
-// 				}
-// 			}
 
 			$action->setParams(array_merge($params, $match));
 			$kernel = $this->getServiceContainer()->getKernel();
@@ -70,6 +65,8 @@ class ApiApplication extends AbstractApplication {
 			$response->setData($this->exceptionToJson($e));
 		}
 
+		$response = $this->setCorsHeaders($response, $router, $path);
+		
 		return $this->postProcessing($response);
 	}
 	
@@ -92,6 +89,16 @@ class ApiApplication extends AbstractApplication {
 	private function postProcessing(JsonResponse $response) {
 		$apiUrl = $this->getServiceContainer()->getPreferenceLoader()->getSystemPreferences()->getApiUrl();
 		$response->setContent(str_replace('%apiurl%', $apiUrl, $response->getContent()));
+		return $response;
+	}
+	
+	private function setCorsHeaders(Response $response, ApiRouter $router, $path) {
+		$response->headers->set('Access-Control-Allow-Origin', '*');
+		$response->headers->set('Access-Control-Allow-Methods', implode(', ', $router->getMethods($path)));
+		$response->headers->set('Access-Control-Allow-Headers', 'origin, content-type, accept, authorization');
+		$response->headers->set('Access-Control-Allow-Credentials', true);
+		$response->headers->set('Access-Control-Max-Age', '1000');
+		
 		return $response;
 	}
 

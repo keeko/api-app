@@ -6,11 +6,16 @@ use keeko\framework\routing\AbstractRouter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
+use phootwork\collection\Map;
+use phootwork\collection\ArrayList;
 
 class ApiRouter extends AbstractRouter {
 	
+	private $methods;
+	
 	public function __construct(Request $request, array $options) {
 		parent::__construct($request, $options);
+		$this->methods = new Map();
 	
 		// create routes from db
 		$apis = ApiQuery::create()->joinAction()->useActionQuery()->joinModule()->endUse()->find();
@@ -46,6 +51,12 @@ class ApiRouter extends AbstractRouter {
 			$paramName = $name . 'WithParam';
 			
 			$routes->add($paramName, $paramRoute);
+			
+			if (!$this->methods->has($path)) {
+				$this->methods->set($path, new ArrayList());
+			}
+			$this->methods->get($path)->add(strtoupper($api->getMethod()));
+// 			$this->methods->get($path)->add(strtolower($api->getMethod()));
 		}
 	
 		$this->init($routes);
@@ -66,5 +77,19 @@ class ApiRouter extends AbstractRouter {
 		}
 
 		return $data;
+	}
+	
+	/**
+	 * Returns methods for a given path
+	 * 
+	 * @param string $path
+	 * @return array
+	 */
+	public function getMethods($path) {
+		if ($this->methods->has($path)) {
+			return $this->methods->get($path)->toArray();
+		}
+		
+		return [];
 	}
 }

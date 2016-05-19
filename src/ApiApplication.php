@@ -49,7 +49,7 @@ class ApiApplication extends AbstractApplication {
 		
 		// 403 - Permission denied
 		catch (PermissionDeniedException $e) {
-			$response->setStatusCode($e->getCode());
+			$response->setStatusCode(Response::HTTP_FORBIDDEN);
 			$response->setData($this->exceptionToJson($e));
 		} 
 		
@@ -72,11 +72,13 @@ class ApiApplication extends AbstractApplication {
 	
 	private function exceptionToJson(\Exception $e) {
 		return [
-			'error' => [
+			'errors' => [[
 				'code' => $e->getCode(),
-				'message' => $e->getMessage(),
-				'type' => get_class($e)
-			]
+				'title' => $e->getMessage(),
+				'meta' => [
+					'exception' => get_class($e)
+				]
+			]]
 		];
 	}
 	

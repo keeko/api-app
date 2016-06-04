@@ -3,6 +3,11 @@
 	"description" : "Keeko API Application",
 	"type" : "keeko-app",
 	"license" : "MIT",
+	"authors" : [{
+			"name" : "Thomas Gossmann",
+			"homepage" : "http://gos.si"
+		}
+	],
 	"keywords" : [
 		"keeko",
 		"api"
@@ -20,8 +25,8 @@
 	"require-dev" : {
 		"keeko/framework" : "dev-master",
 		"keeko/core" : "@dev",
-		"composer/composer" : "@dev",
-		"propel/propel" : "@dev",
+		"propel/propel" : "@alpha",
+		"puli/repository" : "@beta",
 		"puli/composer-plugin" : "@beta",
 		"puli/twig-extension" : "@beta",
 		"puli/url-generator" : "@beta",

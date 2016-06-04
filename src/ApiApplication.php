@@ -76,7 +76,8 @@ class ApiApplication extends AbstractApplication {
 				'code' => $e->getCode(),
 				'title' => $e->getMessage(),
 				'meta' => [
-					'exception' => get_class($e)
+					'exception' => get_class($e),
+					'trace' => $e->getTrace()
 				]
 			]]
 		];

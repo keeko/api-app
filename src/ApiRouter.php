@@ -41,13 +41,14 @@ class ApiRouter extends AbstractRouter {
 			);
 
 			// debug: print routes
-// 			printf('%s: %s -> %s<br>', $api->getMethod(), $path, $module->getName() . ':' . $action->getName());
+// 			printf("%s: %s -> %s\n", $api->getMethod(), $path, $module->getName() . ':' . $action->getName());
 
 			$routes->add($name, $route);
 
 			// with params
 			$paramRoute = clone $route;
 			$paramRoute->setPath(sprintf('%s%s{params}', $path, $this->options['param-separator']));
+			$paramRoute->setRequirement('params', '.+');
 			$paramName = $name . 'WithParam';
 
 			$routes->add($paramName, $paramRoute);

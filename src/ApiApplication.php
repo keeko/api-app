@@ -16,11 +16,10 @@ class ApiApplication extends AbstractApplication {
 
 	public function run(Request $request) {
 		$response = new JsonResponse();
-		$this->router = new ApiRouter($request, ['basepath' => $this->getAppPath()]);
-		$path = str_replace('//', '/', '/' . $this->getDestinationPath());
+		$this->router = new ApiRouter($request, ['basepath' => $this->uri->getBasepath()]);
 
 		try {
-			$match = $this->router->match($path);
+			$match = $this->router->match($this->getDestination());
 
 			// set headers for CORS
 			if ($request->isMethod('options')) {
@@ -66,7 +65,7 @@ class ApiApplication extends AbstractApplication {
 			$response->setData($this->exceptionToJson($e));
 		}
 
-		$response = $this->setCorsHeaders($response, $path);
+		$response = $this->setCorsHeaders($response, $this->getDestination());
 
 		return $this->postProcessing($response);
 	}
